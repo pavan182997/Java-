@@ -1,0 +1,64 @@
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpSession;
+import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.HashMap;
+import java.util.Set;
+
+public class Servlet1 extends HttpServlet 
+{
+	public void service(HttpServletRequest req,HttpServletResponse res)throws ServletException, IOException
+	{
+		try
+		{
+		DataAccess d1 = new DataAccess();
+		System.out.println(d1);
+		ArrayList<Products> l1 = d1.getProductDetails();
+		Iterator<Products> i1 = l1.iterator();
+		
+		d1.closeCon();
+
+		PrintWriter out = res.getWriter();
+		System.out.println(l1);
+
+		
+
+		out.println("<html><body><form><h1> Here you get details of Products </h1><br>");
+		out.println("<style> table { width: 100%;border-collapse: collapse;} th, td { border: 1px solid black; padding: 8px;text-align: left;}th { background-color: #f2f2f2; }</style>");
+		out.println("<table><tr><th>LINE_ID</th><th>PRODUCT</th><th>LINE_QTY</th><th>UNIT_PRICE</th><th>LINE_TOTAL</th>");
+		//System.out.println("hello");
+		while(i1.hasNext())
+		{
+			
+			Products p1 = i1.next();
+
+			int lineid = p1.lineid;
+			String product = p1.product;
+			int lineqty = p1.lineqty;
+			int unitprice = p1.unitprice;
+			int linetotal = p1.linetotal;
+			
+			out.println("<tr><td>"+lineid+"</td><td>"+product+"</td><td>"+lineqty+"</td><td>"+unitprice+"</td><td>"+linetotal+"</td>");
+
+		}
+		out.println("</table><br>");
+		out.println("<a href = http://localhost:8090/view/form1.html> @home page </a>");
+		out.println("</form></body></html>");
+
+		}
+			
+	
+		catch(Exception e1)
+		{
+			System.out.println(e1);
+		}
+
+	}
+}
+

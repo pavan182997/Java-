@@ -1,0 +1,121 @@
+import java.sql.Connection;
+import java.sql.Statement;
+import java.sql.ResultSet;
+import java.sql.DriverManager;
+import java.util.ArrayList;
+
+public class DataAccess 
+{
+	Connection con;
+
+	Statement st1;
+	Statement st2;
+
+	ResultSet rs1;
+	ResultSet rs2;
+
+	public DataAccess()
+	{
+		try
+		{
+			
+			//*Class.forName("oracle.jdbc.driver.OracleDriver");
+			con = DriverManager.getConnection("jdbc:mysql://localhost:3306/details","root","Root@1234");
+		}
+		catch (Exception e1)
+		{
+			System.out.println(e1);
+		}
+	}
+
+
+	public ArrayList<Products> getProductDetails()
+	{
+		ArrayList<Products> a1 = new ArrayList<Products>();
+		String sql1 = "select * from producttable";
+		try
+		{
+			st1 = con.createStatement();
+			rs1 = st1.executeQuery(sql1);
+			while (rs1.next())
+			{
+				int lineid = rs1.getInt("line_id");
+				String product = rs1.getString("product");
+				int lineqty = rs1.getInt("line_quality");
+				int unitprice = rs1.getInt("unit_price");
+				int linetotal = rs1.getInt("line_total");
+				
+				Products  p1 = new Products();
+				p1.lineid = lineid;
+				p1.product = product;
+				p1.lineqty = lineqty;
+				p1.unitprice = unitprice;
+				p1.linetotal = linetotal;
+				a1.add(p1);
+				
+			}
+							
+		}
+		catch (Exception e5)
+		{
+			System.out.println(e5);
+
+		}
+		return(a1);
+	}
+
+
+
+
+	public ArrayList<Order> getOrderDetails()
+	{
+		ArrayList<Order> a1 = new ArrayList<Order>();
+		String sql1 = "select * from ordertable";
+		try
+		{
+			st2 = con.createStatement();
+			rs2 = st2.executeQuery(sql1);
+			while (rs2.next())
+			{
+				int orderid = rs2.getInt("order_id");
+				String orderdate = rs2.getString("order_date");
+				String supplier = rs2.getString("supplier");
+				int ordercost = rs2.getInt("order_cost");
+				int orderlines = rs2.getInt("order_lines");
+				boolean status = rs2.getBoolean("order_status");
+
+				Order o1 = new Order();
+				o1.orderid = orderid;
+				o1.orderdate = orderdate;
+				o1.supplier = supplier;
+				o1.ordercost = ordercost;
+				o1.orderlines = orderlines;
+				o1.status = status;
+				a1.add(o1);
+				
+			}
+							
+		}
+		catch (Exception e5)
+		{
+			System.out.println(e5);
+
+		}
+		return(a1);
+	}
+
+
+
+	public void  closeCon()
+	{
+		try
+		{
+			con.close();
+		}
+		catch (Exception e2)
+		{
+			System.out.println(e2);
+		}
+	}
+
+}  
